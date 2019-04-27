@@ -1,9 +1,45 @@
+// With this setup webpack will bundle all these components in one javascript file.
+// So even if we never navigate to the User component, it will be downloaded to the client at App start
+// OK for smaller applications. For big application we want to seperate the webpack bundle
+    // import Home from "./components/Home.vue";
+    // import Header from "./components/Header.vue";
+    // import User from "./components/user/User.vue";
+    // import UserDetail from "./components/user/UserDetail.vue";
+    // import UserEdit from "./components/user/UserEdit.vue";
+    // import UserStart from "./components/user/UserStart.vue";
+
+// To avoid this we can use lazy loading. We only import the components we need to start the App
 import Home from "./components/Home.vue";
 import Header from "./components/Header.vue";
-import User from "./components/user/User.vue";
-import UserDetail from "./components/user/UserDetail.vue";
-import UserEdit from "./components/user/UserEdit.vue";
-import UserStart from "./components/user/UserStart.vue";
+// Then load the rest when the route need it. This is the syntax for Webpack. You just need to copy it for further 
+// projects
+// !!! The const name must match with the name of the component used in the routes path !! 
+const User = resolve => {
+  require.ensure(["./components/user/User.vue"], () => {
+    resolve(require("./components/user/User.vue"));
+  }, "user");
+};
+// We also can group components to go in the same webpack bundle by adding an additional parameter with the
+// group name at the end of the resolve function.
+// In our case we added the group "user" to all the related user components. Only 1 webpack bundle will be
+// created for all of these. When we hit a user route, the whole bundle will be downloaded
+const UserStart = resolve => {
+  require.ensure(["./components/user/UserStart.vue"], () => {
+    resolve(require("./components/user/UserStart.vue"));
+  }, "user");
+};
+const UserDetail = resolve => {
+  require.ensure(["./components/user/UserDetail.vue"], () => {
+    resolve(require("./components/user/UserDetail.vue"));
+  }, "user");
+};
+const UserEdit = resolve => {
+  require.ensure(["./components/user/UserEdit.vue"], () => {
+    resolve(require("./components/user/UserEdit.vue"));
+  }, "user");
+};
+
+
 
 // !!!! IMPORTANT !!!!
 // The components of the routes will always be displayed in the App.vue file with the 

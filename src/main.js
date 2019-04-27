@@ -42,7 +42,7 @@ const router = new VueRouter({
   //      2. next("/routeName") to make a redirect
   //      3. next(false) will abort the routing. So the user stays on the initial page
 router.beforeEach((to, from, next) => {
-  console.log("Global router beforeEach. to: "+to+" from:"+from);
+  console.log("Global router beforeEach");
   next();
 });
 
